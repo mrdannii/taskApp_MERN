@@ -9,7 +9,7 @@ const fetchuser = require("../middleware/fetchuser");
 router.get("/fetchalltasks", fetchuser, async (req, res) => {
   try {
     const tasks = await Tasks.find({ user: req.user.id });
-    res.json({ tasks });
+    res.json(tasks);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Opps Something Went Wrong");
@@ -21,8 +21,8 @@ router.post(
   "/addtask",
   fetchuser,
   [
-    body("title", "Enter a Valid Title").isLength({ min: 3 }),
-    body("description", "Enter a Valid Description").isLength({ min: 5 }),
+    body("title", "Enter a Valid Title").isLength({ min: 1 }),
+    body("description", "Enter a Valid Description").isLength({ min: 1 }),
   ],
   async (req, res) => {
     try {
@@ -39,7 +39,7 @@ router.post(
         user: req.user.id,
       });
       const savedTask = await task.save();
-      res.json({ savedTask });
+      res.json(savedTask);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Opps Something Went Wrong");
@@ -52,8 +52,8 @@ router.put(
   "/updatetask/:id",
   fetchuser,
   [
-    body("title", "Enter a Valid Title").isLength({ min: 3 }),
-    body("description", "Enter a Valid Description").isLength({ min: 5 }),
+    body("title", "Enter a Valid Title").isLength({ min: 1 }),
+    body("description", "Enter a Valid Description").isLength({ min: 1 }),
   ],
   async (req, res) => {
     try {
@@ -88,7 +88,7 @@ router.put(
         { $set: editedtask },
         { new: true }
       );
-      res.json({ task });
+      res.json(task);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Opps Something Went Wrong");

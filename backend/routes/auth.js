@@ -18,6 +18,8 @@ router.post(
   ],
   //checking for errors in data entry and returning errors
   async (req, res) => {
+    let success= false;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -43,7 +45,8 @@ router.post(
 
       const auth_token = jwt.sign(data, JWT_SECRET);
       // console.log(jwt_data);
-      res.json(auth_token);
+      success=true;
+      res.json({success, auth_token});
     } catch (error) {
       //catching for error in creating a user
       console.error(error.message);
@@ -60,6 +63,7 @@ router.post(
     body("password", "Password Can't be Blank").exists(),
   ],
   async (req, res) => {
+    let success= false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -83,9 +87,9 @@ router.post(
       const data = {
         user: { id: user.id },
       };
-
+      success=true;
       const auth_token = jwt.sign(data, JWT_SECRET);
-      res.json({ auth_token });
+      res.json( {success, auth_token} );
     } catch (error) {
       //catching for error in loging in a user
       console.error(error.message);
